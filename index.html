@@ -1224,8 +1224,10 @@ const MOCK_WEIGHTS={
   '自動車運転者の労働時間等の改善のための基準':2.1,
   '労働安全衛生法':1.6,
   '独占禁止法':1.4,
-  '下請法':0.9
+  '取適法':0.9
 };
+// ⑬は取適法の問題だけを出す。旧・下請法の問題は模擬試験に出さない（補充分からも外す）（2026-10-19）
+const MOCK_EXCLUDE_FIELDS=['下請法'];
 let mockTimerInterval=null;
 let isMockMode=false;
 
@@ -1259,7 +1261,7 @@ function startMockExam(){
   // 足りない場合は全体からランダム補充
   if(mockList.length<TARGET){
     const used=new Set(mockList.map(q=>q.id));
-    const rest=shuffle(questions.filter(q=>!used.has(q.id)));
+    const rest=shuffle(questions.filter(q=>!used.has(q.id)&&!MOCK_EXCLUDE_FIELDS.includes(q.field)));
     mockList=mockList.concat(rest.slice(0,TARGET-mockList.length));
   }
   mockList=shuffle(mockList).slice(0,TARGET);
